@@ -106,16 +106,16 @@ function LiveVideoPlayer() {
     const video = videoRef.current;
     if (!video) return;
     if (video.requestFullscreen) video.requestFullscreen();
-    // @ts-ignore
+    // @ts-expect-error - Legacy browser support
     else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-    // @ts-ignore
+    // @ts-expect-error - Legacy browser support
     else if (video.msRequestFullscreen) video.msRequestFullscreen();
-    // @ts-ignore
+    // @ts-expect-error - Legacy browser support
     else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
   };
 
   return (
-    <div>
+    <div className="relative">
       <video
         ref={videoRef}
         controls
@@ -129,6 +129,13 @@ function LiveVideoPlayer() {
         }}
         poster={channelLogo}
       />
+      <button
+        onClick={handleFullscreen}
+        className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded hover:bg-opacity-70 text-sm"
+        title="เต็มจอ"
+      >
+        ⛶
+      </button>
     </div>
   );
 }

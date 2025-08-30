@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
 import Hls from "hls.js";
 
 const channelLogo = "/globe.svg"; // เปลี่ยนเป็นโลโก้ช่องจริงได้
@@ -46,10 +47,12 @@ const VideoPage = () => {
           marginTop: 32,
         }}
       >
-        <img
+        <Image
           src={channelLogo}
           alt="Channel Logo"
-          style={{ width: 48, height: 48, borderRadius: "50%", boxShadow: "0 2px 8px #0008" }}
+          width={48}
+          height={48}
+          style={{ borderRadius: "50%", boxShadow: "0 2px 8px #0008" }}
         />
         <span
           style={{
