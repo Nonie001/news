@@ -1,103 +1,134 @@
-import Image from "next/image";
 
-export default function Home() {
+
+
+
+"use client";
+import Link from "next/link";
+import React, { useRef, useEffect } from "react";
+import Hls from "hls.js";
+
+
+function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-[#f8fafc] to-[#e0e7ef] font-sans overflow-x-hidden">
+      <main className="max-w-5xl mx-auto py-8 px-4">
+        {/* LIVE VIDEO */}
+        <section className="mb-10">
+          <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
+            <div className="w-full md:w-[60%] flex flex-col items-center">
+              {/* LIVE VIDEO แบบ video + hls.js */}
+              <LiveVideoPlayer />
+            </div>
+            <div className="w-full md:w-[40%] flex flex-col gap-3">
+              <h2 className="text-lg font-bold text-blue-900 mb-1">ข่าวไฮไลต์วันนี้</h2>
+              <div className="bg-white rounded-lg shadow p-4 text-gray-700 flex flex-col gap-2">
+                <Link href="/news/breaking-news-1" className="font-bold hover:underline text-blue-700">เหตุการณ์สำคัญประจำวัน – คลิกอ่านต่อ</Link>
+                <div className="text-xs text-gray-500 mt-1">31 ส.ค. 2025 • การเมือง</div>
+                <div className="text-sm text-gray-700 line-clamp-2">เนื้อหาข่าวย่อสั้น ๆ เพื่อดึงดูดความสนใจของผู้อ่าน...</div>
+              </div>
+              <div className="bg-white rounded-lg shadow p-4 text-gray-700 flex flex-col gap-2">
+                <Link href="/news/breaking-news-2" className="font-bold hover:underline text-blue-700">ข่าวด่วน: ผลเลือกตั้งล่าสุด</Link>
+                <div className="text-xs text-gray-500 mt-1">31 ส.ค. 2025 • การเมือง</div>
+                <div className="text-sm text-gray-700 line-clamp-2">สรุปผลคะแนนเลือกตั้งและบรรยากาศสด...</div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        {/* ข่าวล่าสุด */}
+        <section className="mb-10">
+          <h2 className="text-xl font-bold mb-3 text-blue-900">ข่าวล่าสุด</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {[1,2,3,4].map(i => (
+              <div key={i} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2">
+                <Link href={`/news/news-${i}`} className="font-semibold text-blue-800 hover:underline">หัวข้อข่าวตัวอย่าง {i}</Link>
+                <div className="text-xs text-gray-500">31 ส.ค. 2025 • เศรษฐกิจ</div>
+                <div className="text-sm text-gray-700 line-clamp-2">เนื้อหาข่าวย่อสั้น ๆ เพื่อดึงดูดความสนใจของผู้อ่าน...</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* หมวดหมู่เด่น */}
+        <section className="mb-10">
+          <h2 className="text-xl font-bold mb-3 text-blue-900">หมวดหมู่</h2>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { name: "การเมือง", slug: "politics" },
+              { name: "เศรษฐกิจ", slug: "economy" },
+              { name: "ไลฟ์สไตล์", slug: "lifestyle" },
+              { name: "เทคโนโลยี", slug: "tech" },
+              { name: "กีฬา", slug: "sport" },
+            ].map(cat => (
+              <Link key={cat.slug} href={`/category/${cat.slug}`} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full hover:bg-blue-200 text-sm font-medium">
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ลิงก์ไปยังฟีเจอร์อื่น */}
+        <section className="flex flex-wrap gap-4 mt-8">
+          <Link href="/search" className="underline text-blue-700">ค้นหาข่าว</Link>
+          <Link href="/archive/2025/08" className="underline text-blue-700">คลังข่าว ส.ค. 2025</Link>
+          <Link href="/tag/เลือกตั้ง" className="underline text-blue-700">#เลือกตั้ง</Link>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    </div>
+  );
+}
+
+export default Home;
+
+// --- LiveVideoPlayer Component ---
+const channelLogo = "/globe.svg";
+const streamUrl = "https://live.ufu.life/hls/streamufu.m3u8";
+
+function LiveVideoPlayer() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(videoRef.current);
+        return () => {
+          hls.destroy();
+        };
+      } else if (videoRef.current.canPlayType && videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+        videoRef.current.src = streamUrl;
+      }
+    }
+  }, []);
+
+  const handleFullscreen = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.requestFullscreen) video.requestFullscreen();
+    // @ts-ignore
+    else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+    // @ts-ignore
+    else if (video.msRequestFullscreen) video.msRequestFullscreen();
+    // @ts-ignore
+    else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
+  };
+
+  return (
+    <div>
+      <video
+        ref={videoRef}
+        controls
+        autoPlay
+        style={{
+          width: "100%",
+          maxWidth: 900,
+          height: 360,
+          background: "#000",
+          outline: "none",
+        }}
+        poster={channelLogo}
+      />
     </div>
   );
 }
