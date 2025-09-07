@@ -9,7 +9,6 @@ import Hls from "hls.js";
 
 function Home() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white">
@@ -37,49 +36,7 @@ function Home() {
         </div>
       )}
 
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
-          <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl">
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-gray-900">เมนู</h2>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 text-gray-500 hover:text-gray-700"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <nav className="p-4 space-y-4">
-              <Link href="/" className="block py-3 text-gray-700 font-medium border-b border-gray-100">
-                หน้าหลัก
-              </Link>
-              <Link href="/news" className="block py-3 text-gray-700 font-medium border-b border-gray-100">
-                ข่าวล่าสุด
-              </Link>
-              <Link href="/category/religious-news" className="block py-3 text-gray-700 font-medium border-b border-gray-100">
-                ข่าวศาสนา
-              </Link>
-              <Link href="/category/palestine-news" className="block py-3 text-gray-700 font-medium border-b border-gray-100">
-                ข่าวปาเลสไตน์
-              </Link>
-              <Link href="/category/religious-articles" className="block py-3 text-gray-700 font-medium border-b border-gray-100">
-                บทความศาสนา
-              </Link>
-              <Link href="/video" className="block py-3 text-gray-700 font-medium border-b border-gray-100">
-                วิดีโอ
-              </Link>
-              <Link href="/contact" className="block py-3 text-gray-700 font-medium border-b border-gray-100">
-                ติดต่อ
-              </Link>
-            </nav>
-          </div>
-        </div>
-      )}
+
       {/* Breaking News Banner */}
       <div className="bg-green-700 text-white py-2 px-3 sm:px-4">
         <div className="max-w-7xl mx-auto">
@@ -94,27 +51,7 @@ function Home() {
                 </p>
               </div>
             </div>
-            {/* Mobile Action Buttons */}
-            <div className="flex items-center space-x-2 lg:hidden">
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-2 text-white hover:bg-green-600 rounded"
-                aria-label="เปิดการค้นหา"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="p-2 text-white hover:bg-green-600 rounded"
-                aria-label="เปิดเมนู"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </div>
+
           </div>
         </div>
       </div>
